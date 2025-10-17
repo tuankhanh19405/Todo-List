@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 const API_BASE = 'https://api-class-o1lo.onrender.com/api/v1';
 
@@ -13,7 +14,7 @@ const TodoList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalPages, setTotalPages] = useState(0)
+  const [totalPages, setTotalPages] = useState(0);
 
   const getTodoStatus = (todo) => {
     const today = new Date('2025-10-10T20:57:00+07:00');
@@ -42,13 +43,10 @@ const TodoList = () => {
       if (response.data.success) {
         const data = response.data.data || [];
         setTodos(data);
-        
-        // Lấy thông tin phân trang từ meta
         if (response.data.meta) {
           setTotalItems(response.data.meta.total || 0);
           setTotalPages(response.data.meta.totalPages || 0);
         } else {
-          // Trường hợp không có meta (không phân trang)
           setTotalItems(data.length);
           setTotalPages(1);
         }
@@ -66,7 +64,6 @@ const TodoList = () => {
     fetchTodos();
   }, [searchQuery, priorityFilter, sortOrder, currentPage]);
 
-  // Reset về trang 1 khi filter thay đổi
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, priorityFilter, sortOrder]);
@@ -96,7 +93,6 @@ const TodoList = () => {
       startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
 
-    // Nút trang đầu
     if (startPage > 1) {
       pageNumbers.push(
         <button
@@ -116,7 +112,6 @@ const TodoList = () => {
       }
     }
 
-    // Các trang ở giữa
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
@@ -133,7 +128,6 @@ const TodoList = () => {
       );
     }
 
-    // Nút trang cuối
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pageNumbers.push(
@@ -251,6 +245,13 @@ const TodoList = () => {
                         </svg>
                         {new Date(todo.dueDate).toLocaleDateString('vi-VN')}
                       </span>
+                      {/* View Details Button */}
+                      <Link
+                        to={`/todos/${todo._id}`}
+                        className="px-3 py-1 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all"
+                      >
+                        Xem chi tiết
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -263,14 +264,12 @@ const TodoList = () => {
         {totalPages > 1 && (
           <div className="bg-white rounded-xl shadow-md p-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              {/* Thông tin trang */}
               <div className="text-sm text-gray-600">
                 Trang <span className="font-semibold text-gray-800">{currentPage}</span> / <span className="font-semibold text-gray-800">{totalPages}</span>
                 <span className="mx-2">•</span>
                 Tổng <span className="font-semibold text-gray-800">{totalItems}</span> mục
               </div>
 
-              {/* Nút điều hướng */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
@@ -283,7 +282,6 @@ const TodoList = () => {
                   Trước
                 </button>
 
-                {/* Số trang */}
                 <div className="flex items-center gap-1">
                   {renderPageNumbers()}
                 </div>

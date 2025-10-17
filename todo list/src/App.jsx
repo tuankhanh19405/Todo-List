@@ -1,12 +1,20 @@
-import TodoList from "./pages/todolist";
+import { Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import TodoList from './pages/TodoList';
+import ImportantTodos from './pages/ImportantTodos';
+import TodoDetail from './pages/TodoDetail';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center">
-      <div className="max-w-4xl w-full p-4">
-        <TodoList />
-      </div>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<TodoList />} />
+          <Route path='/important' element={<ImportantTodos />} />
+          <Route path='/todos/:id' element={<TodoDetail />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
