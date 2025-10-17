@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom';
 
 const API_BASE = 'https://api-class-o1lo.onrender.com/api/v1';
 
@@ -178,20 +178,20 @@ const TodoList = () => {
           <p className="text-gray-600">Quản lý công việc của bạn một cách hiệu quả</p>
         </div>
 
-        {/* Bộ lọc và tìm kiếm */}
+        {/* Bộ lọc, tìm kiếm và nút Thêm mới */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
             <input
               type="text"
               placeholder="🔍 Tìm kiếm todo..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="flex-1 md:flex-none md:w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+              className="flex-1 md:flex-none md:w-1/4 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
             >
               <option value="all">Tất cả ưu tiên</option>
               <option value="1">Ưu tiên thấp</option>
@@ -201,11 +201,17 @@ const TodoList = () => {
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+              className="flex-1 md:flex-none md:w-1/4 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
             >
               <option value="desc">Giảm dần</option>
               <option value="asc">Tăng dần</option>
             </select>
+            <Link
+              to="/todos/add"
+              className="px-4 py-3 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-all"
+            >
+              Thêm mới
+            </Link>
           </div>
         </div>
 
@@ -245,12 +251,17 @@ const TodoList = () => {
                         </svg>
                         {new Date(todo.dueDate).toLocaleDateString('vi-VN')}
                       </span>
-                      {/* View Details Button */}
                       <Link
                         to={`/todos/${todo._id}`}
                         className="px-3 py-1 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all"
                       >
                         Xem chi tiết
+                      </Link>
+                      <Link
+                        to={`/todos/edit/${todo._id}`}
+                        className="px-3 py-1 rounded-lg bg-yellow-600 text-white text-sm font-medium hover:bg-yellow-700 transition-all"
+                      >
+                        Cập nhật
                       </Link>
                     </div>
                   </div>
