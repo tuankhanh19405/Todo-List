@@ -10,6 +10,8 @@ import { API_BASE } from "../../api";
 const loginSchema = z.object({
   email: z.string().email({ message: "Email không hợp lệ" }).nonempty({message:"Không được để trống"}),
   password: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }).nonempty({message:"Không được để trống"}),
+  agreeToTerms: z
+      .boolean()
 });
 
 const LoginPage = () => {
@@ -23,14 +25,16 @@ const LoginPage = () => {
   const nav = useNavigate();
 
   const onSubmit = async (data) => {
+    const {agreeToTerms,...dataNew} = data
     try {
-      const response = await axios.post(`${API_BASE}/auth/login`, data);
+       await axios.post(`${API_BASE}/auth/login`, dataNew);
       toast.success("Đăng nhập thành công!", {
         position: "top-right",
         autoClose: 3000,
       });
-      // Store user data (assuming response contains user data)
-      localStorage.setItem("user", JSON.stringify(response.data));
+       if(agreeToTerms === true){
+        localStorage.setItem("user:",JSON.stringify(dataNew))
+       }
        nav("/todos");
     } catch (error) {
       toast.error(
@@ -80,6 +84,20 @@ const LoginPage = () => {
                   />
                   {errors.password && (
                     <div className="invalid-feedback">{errors.password.message}</div>
+                  )}
+                </div>
+                <div className="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    className={`form-check-input ${errors.agreeToTerms ? "is-invalid" : ""}`}
+                    id="agreeToTerms"
+                    {...register("agreeToTerms")}
+                  />
+                  <label className="form-check-label" htmlFor="agreeToTerms">
+                   Lưu thông tin tài khoản
+                  </label>
+                  {errors.agreeToTerms && (
+                    <div className="invalid-feedback d-block">{errors.agreeToTerms.message}</div>
                   )}
                 </div>
 
