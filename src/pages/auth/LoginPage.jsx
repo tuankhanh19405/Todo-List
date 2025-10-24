@@ -27,15 +27,19 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     const {agreeToTerms,...dataNew} = data
     try {
-       await axios.post(`${API_BASE}/auth/login`, dataNew);
+      const response = await axios.post(`${API_BASE}/auth/login`, dataNew);
+      const { accessToken } = response.data.data; // Lấy accessToken từ data
+      if (accessToken) {
+        localStorage.setItem("token", accessToken); // Lưu accessToken vào localStorage
+      }
       toast.success("Đăng nhập thành công!", {
         position: "top-right",
         autoClose: 3000,
       });
-       if(agreeToTerms === true){
-        localStorage.setItem("user:",JSON.stringify(dataNew))
-       }
-       nav("/todos");
+      if(agreeToTerms === true){
+        localStorage.setItem("user", JSON.stringify(dataNew));
+      }
+      nav("");
     } catch (error) {
       toast.error(
         "Đăng nhập thất bại: " + (error.response?.data?.message || error.message),

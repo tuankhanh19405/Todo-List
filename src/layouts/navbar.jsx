@@ -9,6 +9,14 @@ const Navbar = () => {
     navigate('/todos');
   };
 
+  const handleLogout = () => {
+    // Xóa token và thông tin người dùng khỏi localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Chuyển hướng về trang đăng nhập
+    navigate('/login');
+  };
+
   return (
     <nav className="bg-white shadow-md p-4 sticky top-0 z-10">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -35,6 +43,12 @@ const Navbar = () => {
             className="px-3 py-2 rounded-lg bg-red-100 text-red-700 text-sm font-medium hover:bg-red-200 transition-all"
           >
             Làm mới bộ lọc
+          </button>
+          <button
+            onClick={handleLogout}
+            className="px-3 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-all"
+          >
+            Đăng xuất
           </button>
         </div>
       </div>
